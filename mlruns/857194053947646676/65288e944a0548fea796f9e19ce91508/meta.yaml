@@ -1,0 +1,14 @@
+artifact_uri: mlflow-artifacts:/857194053947646676/65288e944a0548fea796f9e19ce91508/artifacts
+end_time: 1771246787495
+entry_point_name: ''
+experiment_id: '857194053947646676'
+lifecycle_stage: active
+run_id: 65288e944a0548fea796f9e19ce91508
+run_name: EllipticEnvelope-v1
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1771246785829
+status: 3
+tags: []
+user_id: ayebk

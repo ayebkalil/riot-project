@@ -1,0 +1,14 @@
+artifact_uri: mlflow-artifacts:/857194053947646676/4dfac8b51b4a46fc87ba8db20d0c6a5b/artifacts
+end_time: null
+entry_point_name: ''
+experiment_id: '857194053947646676'
+lifecycle_stage: active
+run_id: 4dfac8b51b4a46fc87ba8db20d0c6a5b
+run_name: IsolationForest-v1
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1771485618658
+status: 1
+tags: []
+user_id: ayebk

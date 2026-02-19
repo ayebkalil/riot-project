@@ -1,0 +1,14 @@
+artifact_uri: mlflow-artifacts:/857194053947646676/a32048e032414481a11870e571e2c67d/artifacts
+end_time: 1771246788261
+entry_point_name: ''
+experiment_id: '857194053947646676'
+lifecycle_stage: active
+run_id: a32048e032414481a11870e571e2c67d
+run_name: LocalOutlierFactor-v1
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1771246787626
+status: 3
+tags: []
+user_id: ayebk

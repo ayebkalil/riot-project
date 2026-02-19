@@ -9,3 +9,6 @@ melek bouabid
 
 ## Objective
 Build and evaluate machine-learning models using Riot API match data to predict (1) match outcomes and (2) player tier classifier and(3)smurf detection and (4) RANK PROGRESSION PREDICTION, and identify which gameplay features most influence these predictions.
+
+## Data Schema
+See [data/processed/README.md](data/processed/README.md) for the updated feature dataset schema.

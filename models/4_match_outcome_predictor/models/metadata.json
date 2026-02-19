@@ -1,0 +1,18 @@
+{
+  "feature_names": [
+    "gold_diff",
+    "damage_diff",
+    "kills_diff",
+    "deaths_diff",
+    "assists_diff",
+    "vision_diff",
+    "turrets_diff",
+    "dragons_diff",
+    "barons_diff",
+    "cs_diff"
+  ],
+  "scaler_path": "C:\\Users\\ayebk\\OneDrive\\Desktop\\Riot Games Project\\models\\4_match_outcome_predictor\\models\\scaler.pkl",
+  "model_type": "XGBClassifier",
+  "target": "team_won",
+  "n_features": 10
+}

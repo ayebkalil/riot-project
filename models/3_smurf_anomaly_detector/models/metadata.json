@@ -1,0 +1,23 @@
+{
+  "feature_names": [
+    "winrate_zscore",
+    "kda_zscore",
+    "dmg_share",
+    "gold_share",
+    "avg_game_time",
+    "champ_mastery_entropy",
+    "avg_kill_participation",
+    "avg_gold_per_min",
+    "avg_damage_per_min",
+    "avg_vision_per_min",
+    "team_first_blood_rate",
+    "team_first_tower_rate",
+    "team_first_dragon_rate",
+    "player_first_blood_rate"
+  ],
+  "scaler_path": "C:\\Users\\ayebk\\OneDrive\\Desktop\\Riot Games Project\\models\\3_smurf_anomaly_detector\\models\\scaler.pkl",
+  "model_type": "IsolationForest",
+  "task": "anomaly_detection",
+  "n_features": 14,
+  "run_name": "IsolationForest-v2"
+}

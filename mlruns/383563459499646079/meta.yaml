@@ -1,0 +1,6 @@
+artifact_location: mlflow-artifacts:/383563459499646079
+creation_time: 1771246789132
+experiment_id: '383563459499646079'
+last_update_time: 1771246789132
+lifecycle_stage: active
+name: match-outcome-prediction

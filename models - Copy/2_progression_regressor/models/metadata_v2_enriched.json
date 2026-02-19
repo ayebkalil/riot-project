@@ -1,0 +1,25 @@
+{
+  "model_type": "RidgeRegression-v2-alpha10",
+  "features": [
+    "delta_kda",
+    "delta_cs",
+    "delta_gold",
+    "delta_damage",
+    "delta_vision",
+    "delta_kill_participation",
+    "delta_team_first_blood",
+    "delta_team_first_tower",
+    "delta_team_first_dragon",
+    "delta_player_first_blood",
+    "win_streak",
+    "delta_goldPerMinute",
+    "delta_damagePerMinute",
+    "delta_visionScorePerMinute",
+    "delta_skillshotAccuracy",
+    "champion_pool_growth",
+    "total_matches_analyzed"
+  ],
+  "version": "v2_enriched",
+  "test_r2": 0.3571576209720668,
+  "target": "delta_winrate"
+}

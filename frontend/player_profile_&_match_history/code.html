@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>League Analytics | Summoner Profile</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#c8aa6f",
+                        "background-light": "#f8f7f6",
+                        "background-dark": "#0a0e13",
+                        "hextech-blue": "#00c8c8",
+                        "hextech-gold": "#c8aa6f",
+                        "hextech-black": "#1e1a14",
+                        "win": "#28344e",
+                        "loss": "#59343b",
+                        "win-accent": "#00c8c8",
+                        "loss-accent": "#e84057"
+                    },
+                    fontFamily: {
+                        "display": ["Inter"]
+                    },
+                    borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+<style>
+        .hextech-border {
+            border: 1px solid rgba(200, 170, 111, 0.3);
+        }
+        .hextech-gradient {
+            background: linear-gradient(135deg, rgba(30, 26, 20, 1) 0%, rgba(10, 14, 19, 1) 100%);
+        }
+        .win-gradient {
+            background: linear-gradient(90deg, rgba(40, 52, 78, 1) 0%, rgba(10, 14, 19, 0.5) 100%);
+        }
+        .loss-gradient {
+            background: linear-gradient(90deg, rgba(89, 52, 59, 1) 0%, rgba(10, 14, 19, 0.5) 100%);
+        }
+    </style>
+</head>
+<body class="bg-background-light dark:bg-background-dark text-slate-200 font-display min-h-screen">
+<div class="relative flex h-auto min-h-screen w-full flex-col overflow-x-hidden">
+<div class="layout-container flex h-full grow flex-col">
+<!-- Navigation -->
+<header class="flex items-center justify-between whitespace-nowrap border-b border-primary/20 bg-background-dark/80 backdrop-blur-md px-10 py-3 sticky top-0 z-50">
+<div class="flex items-center gap-8">
+<div class="flex items-center gap-4 text-primary">
+<div class="size-6">
+<svg fill="none" viewbox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
+<path d="M4 4H17.3334V17.3334H30.6666V30.6666H44V44H4V4Z" fill="currentColor"></path>
+</svg>
+</div>
+<h2 class="text-primary text-xl font-bold leading-tight tracking-[-0.015em] uppercase">Hextech Insights</h2>
+</div>
+<nav class="flex items-center gap-9">
+<a class="text-primary text-sm font-bold border-b-2 border-primary pb-1" href="#">Overview</a>
+<a class="text-slate-400 hover:text-primary transition-colors text-sm font-medium" href="#">Champions</a>
+<a class="text-slate-400 hover:text-primary transition-colors text-sm font-medium" href="#">Live Game</a>
+<a class="text-slate-400 hover:text-primary transition-colors text-sm font-medium" href="#">Leaderboards</a>
+</nav>
+</div>
+<div class="flex flex-1 justify-end gap-6 items-center">
+<label class="flex flex-col min-w-64 h-10">
+<div class="flex w-full flex-1 items-stretch rounded-lg bg-hextech-black/50 border border-primary/20">
+<div class="text-primary/60 flex items-center justify-center pl-4">
+<span class="material-symbols-outlined text-[20px]">search</span>
+</div>
+<input class="form-input flex w-full min-w-0 flex-1 border-none bg-transparent focus:ring-0 text-slate-200 placeholder:text-slate-500 text-sm" placeholder="Search Summoner Name..." value=""/>
+</div>
+</label>
+<div class="size-10 rounded-full border border-primary/40 p-0.5">
+<img class="rounded-full w-full h-full object-cover" data-alt="User profile avatar" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAkE64ejj2d2hKUKmQ15Gso-u6jYvuYK62jqkinYl0WGVo5QRyQInOmJXdRootAruzC1Cl6oAjp1wARXQHFUHyhTpikSnb_gMPmFXm2uziRqfP_PLl0tdrjJw9jmf18LrBvt3F8IWptPjPf8PBmLT3zLwA8Qxde0j1hSFZC6Hrf2POGOoA0VQRbwRg2cNMQ42HLztVfMQT-xHJkS2PlSlJ2LIk_rcSTkr8Kmd-6JO6hlMgY_aYw3dISu1lIx5KOJgneT1mU_n2rLaiR"/>
+</div>
+</div>
+</header>
+<main class="px-10 lg:px-40 py-8 max-w-[1400px] mx-auto w-full">
+<!-- Profile Header -->
+<section class="flex flex-col @container mb-8">
+<div class="flex w-full flex-col gap-6 lg:flex-row lg:items-center lg:justify-between p-6 rounded-xl border border-primary/30 bg-hextech-black/40 backdrop-blur-sm shadow-2xl">
+<div class="flex gap-6 items-center">
+<div class="relative">
+<div class="bg-center bg-no-repeat aspect-square bg-cover rounded-xl size-32 border-2 border-primary shadow-[0_0_15px_rgba(200,170,111,0.3)]" data-alt="Summoner profile icon with gold border" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuB7GP_VnXO-asFsFK-XEyW0QEezQnWFFEx5yfswtkuQJ3F7VMhGGjcBOk36StCtZ5ZuuIOpcCMq8Wf6TOOPYG196ihdGR3MyivFt2NOf_mBUSzNI_OwUPBD8oduHW7TBerSXsOHER42DCaXLZ1KKMrKFAkOCrzmoOBfhDOGK7nYXj_M4xi9aqNsQhtXyc5E_vI4jA08qQK0u8N9CUs4JdWO2MuAOJX4Xqv32Hwc0N8E_9bRszvTDq_EQ3JdjAjdkrUXTyofJS0Z9hkE");'></div>
+<span class="absolute -bottom-2 left-1/2 -translate-x-1/2 bg-hextech-black border border-primary text-primary text-[10px] px-2 py-0.5 font-bold rounded">LVL 342</span>
+</div>
+<div class="flex flex-col">
+<div class="flex items-center gap-2">
+<h1 class="text-slate-100 text-3xl font-black tracking-tight">Hide on bush <span class="text-slate-500 font-medium">#KR1</span></h1>
+<span class="material-symbols-outlined text-primary text-xl">verified</span>
+</div>
+<div class="flex items-center gap-4 mt-1">
+<p class="text-primary font-bold text-lg">Diamond I <span class="text-slate-400 font-normal ml-1">45 LP</span></p>
+<div class="w-1 h-1 bg-slate-600 rounded-full"></div>
+<p class="text-slate-400 text-sm uppercase tracking-wider font-semibold">Ranked Solo</p>
+</div>
+<div class="flex items-center gap-4 mt-3">
+<div class="flex flex-col">
+<span class="text-[10px] text-slate-500 uppercase font-bold tracking-widest">Win Rate</span>
+<span class="text-hextech-blue font-bold text-lg">65.2%</span>
+</div>
+<div class="w-px h-8 bg-slate-700"></div>
+<div class="flex flex-col">
+<span class="text-[10px] text-slate-500 uppercase font-bold tracking-widest">W / L</span>
+<span class="text-slate-300 font-medium text-lg">120W <span class="text-slate-500">/</span> 64L</span>
+</div>
+</div>
+</div>
+</div>
+<div class="flex gap-3">
+<button class="flex min-w-[140px] cursor-pointer items-center justify-center rounded-lg h-12 px-6 bg-primary/10 border border-primary/40 text-primary hover:bg-primary/20 transition-all text-sm font-bold uppercase tracking-widest">
+<span class="material-symbols-outlined mr-2 text-sm">refresh</span> Update
+                            </button>
+<button class="flex min-w-[140px] cursor-pointer items-center justify-center rounded-lg h-12 px-6 bg-primary text-hextech-black hover:bg-white transition-all text-sm font-bold uppercase tracking-widest shadow-[0_0_20px_rgba(200,170,111,0.4)]">
+                                Live Game
+                            </button>
+</div>
+</div>
+</section>
+<div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+<!-- Analytics Side -->
+<div class="lg:col-span-1 space-y-6">
+<!-- Smurf Probability -->
+<div class="p-6 rounded-xl border border-primary/20 bg-hextech-black/40 flex flex-col items-center text-center">
+<h3 class="text-slate-400 text-xs font-bold uppercase tracking-[0.2em] mb-4">Smurf Probability</h3>
+<div class="relative size-40 flex items-center justify-center">
+<svg class="size-full -rotate-90" viewbox="0 0 36 36">
+<circle class="stroke-slate-800" cx="18" cy="18" fill="none" r="16" stroke-width="2.5"></circle>
+<circle class="stroke-primary" cx="18" cy="18" fill="none" r="16" stroke-dasharray="100" stroke-dashoffset="15" stroke-linecap="round" stroke-width="2.5"></circle>
+</svg>
+<div class="absolute flex flex-col items-center">
+<span class="text-3xl font-black text-primary">85%</span>
+<span class="text-[10px] text-slate-500 font-bold uppercase">Confidence</span>
+</div>
+</div>
+<p class="mt-4 text-sm text-slate-300">High probability of an alt-account. Performance metrics exceed bracket averages.</p>
+</div>
+<!-- Progression Analysis -->
+<div class="flex flex-col gap-2 rounded-xl border border-primary/20 bg-hextech-black/40 p-6 shadow-xl">
+<div class="flex justify-between items-center mb-4">
+<p class="text-slate-400 text-xs font-bold uppercase tracking-[0.2em]">Progression Analysis</p>
+<span class="text-hextech-blue text-xs font-bold">+15% Gain</span>
+</div>
+<div class="flex min-h-[160px] flex-1 flex-col gap-4">
+<svg fill="none" height="120" preserveaspectratio="none" viewbox="0 0 478 150" width="100%" xmlns="http://www.w3.org/2000/svg">
+<path d="M0 109C18.1538 109 18.1538 21 36.3077 21C54.4615 21 54.4615 41 72.6154 41C90.7692 41 90.7692 93 108.923 93C127.077 93 127.077 33 145.231 33C163.385 33 163.385 101 181.538 101C199.692 101 199.692 61 217.846 61C236 61 236 45 254.154 45C272.308 45 272.308 121 290.462 121C308.615 121 308.615 149 326.769 149C344.923 149 344.923 1 363.077 1C381.231 1 381.231 81 399.385 81C417.538 81 417.538 129 435.692 129C453.846 129 453.846 25 472 25V149H326.769H0V109Z" fill="url(#line_grad)"></path>
+<path d="M0 109C18.1538 109 18.1538 21 36.3077 21C54.4615 21 54.4615 41 72.6154 41C90.7692 41 90.7692 93 108.923 93C127.077 93 127.077 33 145.231 33C163.385 33 163.385 101 181.538 101C199.692 101 199.692 61 217.846 61C236 61 236 45 254.154 45C272.308 45 272.308 121 290.462 121C308.615 121 308.615 149 326.769 149C344.923 149 344.923 1 363.077 1C381.231 1 381.231 81 399.385 81C417.538 81 417.538 129 435.692 129C453.846 129 453.846 25 472 25" stroke="#c8aa6f" stroke-linecap="round" stroke-width="3"></path>
+<defs>
+<lineargradient id="line_grad" x1="0" x2="0" y1="0" y2="1">
+<stop offset="0%" stop-color="#c8aa6f" stop-opacity="0.3"></stop>
+<stop offset="100%" stop-color="#c8aa6f" stop-opacity="0"></stop>
+</lineargradient>
+</defs>
+</svg>
+<div class="flex justify-between px-2">
+<p class="text-slate-500 text-[10px] font-bold">G1</p>
+<p class="text-slate-500 text-[10px] font-bold">G10</p>
+<p class="text-slate-500 text-[10px] font-bold">G20</p>
+</div>
+</div>
+</div>
+</div>
+<!-- Match History Main -->
+<div class="lg:col-span-2 space-y-4">
+<div class="flex justify-between items-center mb-6">
+<h2 class="text-xl font-bold text-slate-100 flex items-center gap-2">
+<span class="material-symbols-outlined text-primary">history</span> Match History
+                            </h2>
+<div class="flex gap-2">
+<span class="px-3 py-1 bg-primary text-hextech-black text-[10px] font-bold rounded uppercase cursor-pointer">All</span>
+<span class="px-3 py-1 bg-hextech-black/40 text-slate-400 text-[10px] font-bold rounded uppercase cursor-pointer hover:text-primary transition-colors">Ranked</span>
+<span class="px-3 py-1 bg-hextech-black/40 text-slate-400 text-[10px] font-bold rounded uppercase cursor-pointer hover:text-primary transition-colors">Normal</span>
+</div>
+</div>
+<!-- Match Card: Win -->
+<div class="win-gradient border-l-4 border-win-accent rounded-lg overflow-hidden flex items-center p-4 transition-transform hover:scale-[1.01] cursor-pointer">
+<div class="flex flex-col items-center w-24 border-r border-slate-700/50 pr-4">
+<span class="text-xs font-bold text-win-accent uppercase tracking-wider">Victory</span>
+<span class="text-[10px] text-slate-400 font-medium">Ranked Solo</span>
+<span class="text-[10px] text-slate-500 mt-2">24:12</span>
+</div>
+<div class="flex items-center gap-4 px-4 flex-1">
+<div class="relative size-14">
+<img class="size-full rounded-lg border border-primary/40 object-cover" data-alt="Champion icon: Lee Sin" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDr4P-pLNEeOKJNcAdWXo8INA9PoQHpPP7H-t4VcSDYRG0fLcDjBux-jFDfNF-4q9K5OLnZOO47zh7Qg8TK7BGTuqp_Z0XiX4BqHHAc4ZlOSWVg0NhgxJp2dJxCPE5onmU934hl4kxKXW4wALVKEqnnRIW0edjDewBSbfTaSmZTMjxuxI6k_Q1V0YVVPDKrfB75G59MkFEdu440hb5I6Yh6kYhS8PusFrJZmJmTe_GQD4W8Wf_k_sNMNwFXvxJmhsadnjFCy9nCNGlg"/>
+<span class="absolute -bottom-1 -right-1 bg-black border border-primary/40 text-[9px] px-1 rounded text-white">18</span>
+</div>
+<div class="flex flex-col gap-1 min-w-[80px]">
+<div class="flex gap-1">
+<div class="size-5 bg-slate-800 rounded-sm border border-slate-700"></div>
+<div class="size-5 bg-slate-800 rounded-sm border border-slate-700"></div>
+</div>
+<div class="flex gap-1">
+<div class="size-5 bg-slate-800 rounded-sm border border-slate-700"></div>
+<div class="size-5 bg-slate-800 rounded-sm border border-slate-700"></div>
+</div>
+</div>
+<div class="flex flex-col items-center flex-1">
+<p class="text-xl font-black text-slate-100 tabular-nums">12 <span class="text-slate-500">/</span> 2 <span class="text-slate-500">/</span> 8</p>
+<p class="text-xs text-slate-400 font-bold">10.00 <span class="text-primary">KDA</span></p>
+</div>
+<div class="flex flex-col items-end gap-1">
+<div class="flex gap-1">
+<div class="size-6 bg-slate-800 border border-slate-700 rounded-sm"></div>
+<div class="size-6 bg-slate-800 border border-slate-700 rounded-sm"></div>
+<div class="size-6 bg-slate-800 border border-slate-700 rounded-sm"></div>
+<div class="size-6 bg-slate-800 border border-slate-700 rounded-sm"></div>
+<div class="size-6 bg-primary/20 border border-primary/40 rounded-sm"></div>
+</div>
+<div class="text-[10px] text-slate-500 font-medium">CS 245 (9.2)</div>
+</div>
+</div>
+<div class="flex flex-col items-center gap-2 px-4 border-l border-slate-700/50">
+<div class="size-10 rounded-full border-2 border-primary flex items-center justify-center bg-hextech-black">
+<span class="text-primary font-black text-xs">MVP</span>
+</div>
+<span class="text-[10px] font-bold text-primary">SCORE: 9.8</span>
+</div>
+</div>
+<!-- Match Card: Loss -->
+<div class="loss-gradient border-l-4 border-loss-accent rounded-lg overflow-hidden flex items-center p-4 transition-transform hover:scale-[1.01] cursor-pointer opacity-90">
+<div class="flex flex-col items-center w-24 border-r border-slate-700/50 pr-4">
+<span class="text-xs font-bold text-loss-accent uppercase tracking-wider">Defeat</span>
+<span class="text-[10px] text-slate-400 font-medium">Ranked Solo</span>
+<span class="text-[10px] text-slate-500 mt-2">32:45</span>
+</div>
+<div class="flex items-center gap-4 px-4 flex-1">
+<div class="relative size-14">
+<img class="size-full rounded-lg border border-slate-700 object-cover" data-alt="Champion icon: Ahri" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDdrexlZw1oMqxVPMB6uGlQevRLqTeZhy4WN953oYfgqwWVKvxlC4iVMkQDr_Awj-Y39rHCigUpazgMuPzeM-BN37iDztNsZVVRMGZACeLgyGLlnlqsn9XMTWx1gQwSFGrhBC_MQvAeBOi4ZaONTiK27fCPeIV-PLrDgsNuGqNyhF9UuAU8nKtMro9lcf7mCTCva0sUPlT0njf5Fwfi_L9_73HdAiInVbWQtwOqcknU-NBJA4Gq_1lxtj1RYVYRNK_Dt8WnqhfzO31-"/>
+<span class="absolute -bottom-1 -right-1 bg-black border border-slate-700 text-[9px] px-1 rounded text-white">16</span>
+</div>
+<div class="flex flex-col gap-1 min-w-[80px]">
+<div class="flex gap-1">
+<div class="size-5 bg-slate-800 rounded-sm border border-slate-700"></div>
+<div class="size-5 bg-slate-800 rounded-sm border border-slate-700"></div>
+</div>
+<div class="flex gap-1">
+<div class="size-5 bg-slate-800 rounded-sm border border-slate-700"></div>
+<div class="size-5 bg-slate-800 rounded-sm border border-slate-700"></div>
+</div>
+</div>
+<div class="flex flex-col items-center flex-1">
+<p class="text-xl font-black text-slate-100 tabular-nums">4 <span class="text-slate-500">/</span> 7 <span class="text-slate-500">/</span> 12</p>
+<p class="text-xs text-slate-400 font-bold">2.28 <span class="text-slate-500">KDA</span></p>
+</div>
+<div class="flex flex-col items-end gap-1">
+<div class="flex gap-1">
+<div class="size-6 bg-slate-800 border border-slate-700 rounded-sm"></div>
+<div class="size-6 bg-slate-800 border border-slate-700 rounded-sm"></div>
+<div class="size-6 bg-slate-800 border border-slate-700 rounded-sm"></div>
+<div class="size-6 bg-slate-800 border border-slate-700 rounded-sm"></div>
+<div class="size-6 bg-slate-800 border border-slate-700 rounded-sm"></div>
+</div>
+<div class="text-[10px] text-slate-500 font-medium">CS 210 (6.4)</div>
+</div>
+</div>
+<div class="flex flex-col items-center gap-2 px-4 border-l border-slate-700/50">
+<div class="size-10 rounded-full border-2 border-slate-700 flex items-center justify-center bg-hextech-black">
+<span class="text-slate-500 font-black text-xs">ACE</span>
+</div>
+<span class="text-[10px] font-bold text-slate-500">SCORE: 6.2</span>
+</div>
+</div>
+<!-- Match Card: Win 2 -->
+<div class="win-gradient border-l-4 border-win-accent rounded-lg overflow-hidden flex items-center p-4 transition-transform hover:scale-[1.01] cursor-pointer">
+<div class="flex flex-col items-center w-24 border-r border-slate-700/50 pr-4">
+<span class="text-xs font-bold text-win-accent uppercase tracking-wider">Victory</span>
+<span class="text-[10px] text-slate-400 font-medium">Ranked Solo</span>
+<span class="text-[10px] text-slate-500 mt-2">18:05</span>
+</div>
+<div class="flex items-center gap-4 px-4 flex-1">
+<div class="relative size-14">
+<img class="size-full rounded-lg border border-primary/40 object-cover" data-alt="Champion icon: Yasuo" src="https://lh3.googleusercontent.com/aida-public/AB6AXuD_IPdqqow2Rpy5U3UF02TULnOcyWpMTuiFESke3S-2z0OnaaKFz6UAcnCfa1d_rmKJX0A4YTuznNKDlshQ3UThWdo5UFMvrO4s55X3nxhFZUtPDpOIMguSPHWarjHcUrgrdL5yrPWo8urzKwwUbyiusJFM783UBAQauYHTyyLWKCg7WLrhSANwiRY4hAEtyw8LEUkPuAMV8LlkHsSBFjZvZAkri27js32BGyhzEN6Wqmr11NI78exCpdEc8lonU_bt8Krg_IW75lH2"/>
+<span class="absolute -bottom-1 -right-1 bg-black border border-primary/40 text-[9px] px-1 rounded text-white">14</span>
+</div>
+<div class="flex flex-col gap-1 min-w-[80px]">
+<div class="flex gap-1">
+<div class="size-5 bg-slate-800 rounded-sm border border-slate-700"></div>
+<div class="size-5 bg-slate-800 rounded-sm border border-slate-700"></div>
+</div>
+<div class="flex gap-1">
+<div class="size-5 bg-slate-800 rounded-sm border border-slate-700"></div>
+<div class="size-5 bg-slate-800 rounded-sm border border-slate-700"></div>
+</div>
+</div>
+<div class="flex flex-col items-center flex-1">
+<p class="text-xl font-black text-slate-100 tabular-nums">9 <span class="text-slate-500">/</span> 1 <span class="text-slate-500">/</span> 4</p>
+<p class="text-xs text-slate-400 font-bold">13.00 <span class="text-primary">KDA</span></p>
+</div>
+<div class="flex flex-col items-end gap-1">
+<div class="flex gap-1">
+<div class="size-6 bg-slate-800 border border-slate-700 rounded-sm"></div>
+<div class="size-6 bg-slate-800 border border-slate-700 rounded-sm"></div>
+<div class="size-6 bg-slate-800 border border-slate-700 rounded-sm"></div>
+<div class="size-6 bg-slate-800 border border-slate-700 rounded-sm"></div>
+<div class="size-6 bg-slate-800 border border-slate-700 rounded-sm"></div>
+</div>
+<div class="text-[10px] text-slate-500 font-medium">CS 188 (10.4)</div>
+</div>
+</div>
+<div class="flex flex-col items-center gap-2 px-4 border-l border-slate-700/50">
+<div class="size-10 rounded-full border-2 border-primary flex items-center justify-center bg-hextech-black">
+<span class="text-primary font-black text-xs">S+</span>
+</div>
+<span class="text-[10px] font-bold text-primary">SCORE: 9.9</span>
+</div>
+</div>
+<button class="w-full py-4 bg-hextech-black/40 border border-slate-700/50 rounded-lg text-slate-400 text-sm font-bold hover:bg-hextech-black hover:text-primary transition-all">
+                            Load More Matches
+                        </button>
+</div>
+</div>
+<!-- Footer / Insights -->
+<section class="mt-12 pt-8 border-t border-primary/20">
+<h2 class="text-white text-xl font-bold mb-6 flex items-center gap-2">
+<span class="material-symbols-outlined text-primary">lightbulb</span> AI Strategy Insights
+                    </h2>
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+<div class="p-5 rounded-lg bg-hextech-black/20 border border-primary/10 hover:border-primary/40 transition-colors cursor-default">
+<span class="text-primary font-bold text-xs uppercase">Win Condition</span>
+<p class="text-slate-200 mt-2 text-sm">Focus on early dragons. You have an 82% win rate when taking the first 2 drakes.</p>
+</div>
+<div class="p-5 rounded-lg bg-hextech-black/20 border border-primary/10 hover:border-primary/40 transition-colors cursor-default">
+<span class="text-primary font-bold text-xs uppercase">Weakness Detected</span>
+<p class="text-slate-200 mt-2 text-sm">Vision score drops significantly between 15-20 minutes. Consider buying more Control Wards.</p>
+</div>
+<div class="p-5 rounded-lg bg-hextech-black/20 border border-primary/10 hover:border-primary/40 transition-colors cursor-default">
+<span class="text-primary font-bold text-xs uppercase">Strongest Synergy</span>
+<p class="text-slate-200 mt-2 text-sm">You perform best when paired with aggressive junglers like Nidalee or Jarvan IV.</p>
+</div>
+</div>
+</section>
+</main>
+<footer class="mt-auto px-10 py-8 border-t border-primary/10 bg-hextech-black/40 text-center">
+<p class="text-slate-500 text-xs">Hextech Insights isn't endorsed by Riot Games and doesn't reflect the views or opinions of Riot Games or anyone officially involved in producing or managing League of Legends.</p>
+</footer>
+</div>
+</div>
+</body></html>

@@ -1,0 +1,14 @@
+artifact_uri: mlflow-artifacts:/739374773908444786/64bbd6b4d284416899eaf642999e8fd4/artifacts
+end_time: 1771245995867
+entry_point_name: ''
+experiment_id: '739374773908444786'
+lifecycle_stage: active
+run_id: 64bbd6b4d284416899eaf642999e8fd4
+run_name: Random Forest
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1771245991713
+status: 3
+tags: []
+user_id: ayebk

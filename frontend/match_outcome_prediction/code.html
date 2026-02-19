@@ -1,0 +1,420 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Hextech Insights - Match Outcome Prediction</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#c8aa6f",
+                        "background-light": "#f8f7f6",
+                        "background-dark": "#1e1a14",
+                        "hextech-cyan": "#00f0ff",
+                    },
+                    fontFamily: {
+                        "display": ["Inter", "sans-serif"]
+                    },
+                    borderRadius: {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                },
+            },
+        }
+    </script>
+<style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #1e1a14;
+        }
+        .gauge-container {
+            position: relative;
+            width: 300px;
+            height: 150px;
+            overflow: hidden;
+        }
+        .gauge-arc {
+            width: 300px;
+            height: 300px;
+            border-radius: 50%;
+            border: 20px solid #35322c;
+            border-bottom-color: transparent;
+            border-left-color: transparent;
+            transform: rotate(-45deg);
+        }
+        .gauge-fill {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 300px;
+            height: 300px;
+            border-radius: 50%;
+            border: 20px solid #c8aa6f;
+            border-bottom-color: transparent;
+            border-left-color: transparent;
+            transform: rotate(45deg); /* Adjust this to change % */
+            transition: transform 1s ease-out;
+        }
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 4px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: #1e1a14;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #35322c;
+            border-radius: 10px;
+        }
+        .glass-panel {
+            background: rgba(53, 50, 44, 0.4);
+            backdrop-filter: blur(8px);
+            border: 1px solid rgba(200, 170, 111, 0.1);
+        }
+    </style>
+</head>
+<body class="bg-background-light dark:bg-background-dark text-white font-display">
+<div class="relative flex h-auto min-h-screen w-full flex-col bg-background-light dark:bg-background-dark overflow-x-hidden">
+<div class="layout-container flex h-full grow flex-col">
+<!-- Top Navigation Bar -->
+<header class="flex items-center justify-between whitespace-nowrap border-b border-solid border-primary/20 px-6 lg:px-20 py-3 bg-background-dark/80 backdrop-blur-md sticky top-0 z-50">
+<div class="flex items-center gap-8">
+<div class="flex items-center gap-4 text-primary">
+<div class="size-6">
+<svg fill="none" viewbox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
+<path d="M44 4H30.6666V17.3334H17.3334V30.6666H4V44H44V4Z" fill="currentColor"></path>
+</svg>
+</div>
+<h2 class="text-white text-lg font-bold leading-tight tracking-[-0.015em]">Hextech Insights</h2>
+</div>
+<div class="hidden md:flex items-center gap-9">
+<a class="text-white/70 hover:text-primary text-sm font-medium transition-colors" href="#">Dashboard</a>
+<a class="text-primary text-sm font-bold border-b-2 border-primary pb-1" href="#">Predictions</a>
+<a class="text-white/70 hover:text-primary text-sm font-medium transition-colors" href="#">Live Sync</a>
+<a class="text-white/70 hover:text-primary text-sm font-medium transition-colors" href="#">History</a>
+</div>
+</div>
+<div class="flex flex-1 justify-end gap-6 items-center">
+<label class="hidden lg:flex flex-col min-w-40 !h-10 max-w-64">
+<div class="flex w-full flex-1 items-stretch rounded-lg h-full">
+<div class="text-primary/60 flex border-none bg-white/5 items-center justify-center pl-4 rounded-l-lg border-r-0">
+<span class="material-symbols-outlined text-xl">search</span>
+</div>
+<input class="form-input flex w-full min-w-0 flex-1 resize-none overflow-hidden rounded-lg text-white focus:outline-0 focus:ring-0 border-none bg-white/5 focus:border-none h-full placeholder:text-white/30 px-4 rounded-l-none border-l-0 pl-2 text-sm font-normal" placeholder="Search Champions..." value=""/>
+</div>
+</label>
+<div class="flex gap-2">
+<button class="flex size-10 cursor-pointer items-center justify-center rounded-lg bg-white/5 text-white hover:bg-primary/20 transition-all">
+<span class="material-symbols-outlined text-xl">settings</span>
+</button>
+<button class="flex size-10 cursor-pointer items-center justify-center rounded-lg bg-white/5 text-white hover:bg-primary/20 transition-all">
+<span class="material-symbols-outlined text-xl">notifications</span>
+</button>
+</div>
+<div class="bg-center bg-no-repeat aspect-square bg-cover rounded-full size-10 border-2 border-primary/30" data-alt="User profile avatar circle" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuCoYxbfSZbGx9uwW9yamBz4_Kl_CaTWyjlwfpzVWQshV-r-onQ6FAD-UVIbGMXz7d1LYt7CI3HZVyCTl4sOjgCNGGOs5Bnw2huPOmdZCcJC6x1xhfaDdSa205WmUOv7XvltNjcfETki5trAu-BSxCS4b1vBJ1__x4WpMb8We7JW0awCXNbEbDTSqmiqQFiaEe5INHYyxFfrszjSL8FUiy22MhIfcdsfQaIY17LiA2FxBm_3XT7JMmfgYHk2-eWasZgsh4RZ-LZbjQrn");'></div>
+</div>
+</header>
+<main class="flex flex-col px-4 lg:px-20 py-6 max-w-[1600px] mx-auto w-full">
+<!-- Breadcrumbs & Title -->
+<div class="flex flex-wrap items-center gap-2 mb-2">
+<a class="text-white/40 text-sm font-medium hover:text-primary" href="#">Hextech Insights</a>
+<span class="text-white/20 text-sm font-medium">/</span>
+<span class="text-primary text-sm font-medium">Match Outcome Prediction</span>
+</div>
+<div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-8">
+<div>
+<h1 class="text-white text-4xl font-black leading-tight tracking-tight">Outcome Prediction</h1>
+<p class="text-white/50 text-base">Advanced algorithmic forecasting based on current meta and player history.</p>
+</div>
+<div class="flex gap-3">
+<button class="flex items-center gap-2 px-6 py-2.5 bg-white/5 hover:bg-white/10 text-white rounded-lg font-bold text-sm transition-all border border-white/10">
+<span class="material-symbols-outlined text-lg">sync</span>
+                            Sync Live Match
+                        </button>
+<button class="px-8 py-2.5 bg-primary hover:bg-primary/80 text-background-dark rounded-lg font-bold text-sm transition-all shadow-[0_0_20px_rgba(200,170,111,0.3)]">
+                            Run Analysis
+                        </button>
+</div>
+</div>
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+<!-- Left Column: Parameters (Input Panel) -->
+<div class="lg:col-span-7 flex flex-col gap-6">
+<!-- Team Selection Cards -->
+<div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+<!-- Team A (Blue Side) -->
+<div class="glass-panel p-5 rounded-xl border-l-4 border-l-blue-500">
+<div class="flex justify-between items-center mb-6">
+<h3 class="text-blue-400 font-bold flex items-center gap-2">
+<span class="material-symbols-outlined text-lg">shield</span>
+                                        TEAM A (BLUE)
+                                    </h3>
+<span class="text-[10px] bg-blue-500/20 text-blue-400 px-2 py-0.5 rounded font-bold uppercase tracking-wider">Home</span>
+</div>
+<div class="space-y-4">
+<!-- Champion Slot 1 -->
+<div class="flex items-center gap-4 group">
+<div class="size-12 rounded-lg bg-white/5 border border-white/10 flex items-center justify-center overflow-hidden group-hover:border-primary/50 transition-all cursor-pointer relative">
+<div class="absolute inset-0 bg-cover bg-center opacity-80" data-alt="Champion Aatrox portrait" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuC3AM6OuYj6TrdYQIWH-xcZjhub2yLoEZWFvMFhKyD_61U4-GRpWQNGNkJxkGYIqTMnASPjqJCNInWwaexlKhCPkMjOJDJN1cxV8m0jZ4Oy4YUnWtqxW3Nk4mqsE-eooVCvatCWPXOlCE7wrAdSX-EcNik1AvYWaP5zybwSektgXMt8VjvxhiA7zu_QU4bl3dvQlSAUVyDQCauQTwwcYmMoLA3FotVN1YmQxvvQtgMKwc-W2H3tSou98Ifph538Hx7MF1zCdeNBpzld')"></div>
+</div>
+<div class="flex-1">
+<p class="text-[10px] text-white/40 font-bold uppercase">Top Lane</p>
+<select class="w-full bg-transparent border-none p-0 text-sm font-semibold text-white focus:ring-0">
+<option>Aatrox (KDA: 3.2)</option>
+<option>Malphite</option>
+<option>Jax</option>
+</select>
+</div>
+<div class="flex items-center gap-2">
+<div class="h-1.5 w-12 bg-white/5 rounded-full overflow-hidden">
+<div class="h-full bg-primary w-3/4"></div>
+</div>
+</div>
+</div>
+<!-- Champion Slot 2 -->
+<div class="flex items-center gap-4 group">
+<div class="size-12 rounded-lg bg-white/5 border border-white/10 flex items-center justify-center overflow-hidden group-hover:border-primary/50 transition-all cursor-pointer relative">
+<div class="absolute inset-0 bg-cover bg-center opacity-80" data-alt="Champion Lee Sin portrait" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuATYtuHKDywNFncHtjTYZMPIniAHM7wiDY0At5BFq7rMl04dTrmkRznXWSy4r6OYOLiNroCNN6u0gu1FYN2hrcRaUk2x8qI1XjkILaIt_7ZXTHcKvDePb2m9vAwBmo8o-QwX7wqn6fA05nwEg7qeOGITR1aJGuhNndVp8cUrVAVbdqhsrSq6I6TTs9scCVL6RRWNFXI-PjvFTkjE1Vwz-jQ3KGj6Jy9P2HePU73YmVpFZgq_VUWuuUrVI6MTwb6Jmz3NOXLWnJMi0GJ')"></div>
+</div>
+<div class="flex-1">
+<p class="text-[10px] text-white/40 font-bold uppercase">Jungle</p>
+<select class="w-full bg-transparent border-none p-0 text-sm font-semibold text-white focus:ring-0">
+<option>Lee Sin (KDA: 4.1)</option>
+<option>Vi</option>
+<option>Jarvan IV</option>
+</select>
+</div>
+<div class="flex items-center gap-2">
+<div class="h-1.5 w-12 bg-white/5 rounded-full overflow-hidden">
+<div class="h-full bg-primary w-1/2"></div>
+</div>
+</div>
+</div>
+<!-- More slots simplified for UI layout -->
+<div class="flex items-center gap-4 group opacity-60">
+<div class="size-12 rounded-lg bg-white/5 border border-dashed border-white/20 flex items-center justify-center text-white/20">
+<span class="material-symbols-outlined">add</span>
+</div>
+<div class="flex-1"><p class="text-xs text-white/30 italic">Assign Remaining Slots...</p></div>
+</div>
+</div>
+</div>
+<!-- Team B (Red Side) -->
+<div class="glass-panel p-5 rounded-xl border-l-4 border-l-red-500">
+<div class="flex justify-between items-center mb-6">
+<h3 class="text-red-400 font-bold flex items-center gap-2">
+<span class="material-symbols-outlined text-lg">swords</span>
+                                        TEAM B (RED)
+                                    </h3>
+<span class="text-[10px] bg-red-500/20 text-red-400 px-2 py-0.5 rounded font-bold uppercase tracking-wider">Away</span>
+</div>
+<div class="space-y-4">
+<div class="flex items-center gap-4 group">
+<div class="size-12 rounded-lg bg-white/5 border border-white/10 flex items-center justify-center overflow-hidden group-hover:border-hextech-cyan/50 transition-all cursor-pointer relative">
+<div class="absolute inset-0 bg-cover bg-center opacity-80" data-alt="Champion Azir portrait" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuA-FqQQEQD2rc8wWuAwzrN7o9Keqe3BEsEdlX7qQFPFOSttNkmCSN81lAWPJEKWFzLUFDXJUmB-Pxz3jkp7Uv61lD38vJDf9rjWm1fi0Jqzuxt3jT46Lz0tVoWSWqsWExQusuTB98UQXnnAfSBzqiEFwj6hzeSKJoaDgS-mzLUQhAfeZS6E1GTkZYjY7Q_zZOMtSCWfadHRaOO8JU07JRW0Tn4_1p5WjQSKiD0J_S2vgG1Bz73N0z9Q-hte_1utZfi7t7D34Zswtzsa')"></div>
+</div>
+<div class="flex-1">
+<p class="text-[10px] text-white/40 font-bold uppercase">Mid Lane</p>
+<select class="w-full bg-transparent border-none p-0 text-sm font-semibold text-white focus:ring-0">
+<option>Azir (KDA: 2.8)</option>
+<option>Orianna</option>
+<option>Sylas</option>
+</select>
+</div>
+<div class="flex items-center gap-2">
+<div class="h-1.5 w-12 bg-white/5 rounded-full overflow-hidden">
+<div class="h-full bg-hextech-cyan w-4/5"></div>
+</div>
+</div>
+</div>
+<div class="flex items-center gap-4 group">
+<div class="size-12 rounded-lg bg-white/5 border border-white/10 flex items-center justify-center overflow-hidden group-hover:border-hextech-cyan/50 transition-all cursor-pointer relative">
+<div class="absolute inset-0 bg-cover bg-center opacity-80" data-alt="Champion Jinx portrait" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuARzZa6sW6SMRJGIuCS8iWw2hq70U6h1oigFJxcVGE7kzM0UPYeonVSooHAZgPMqKaaUHuUxhpGZpSKJUNPPKoSO8tw3Mnc8RRo346JCeeb2eOOWH1x2XpFnoe68N6Kip65BupS2CyoPqzqmp4qXkfzfuZDWaCK7AI5y2syFmPDNKmLEbUPg2ipXDqK6NbCqipt3Hqgf1RzuTUTQMvFsJjnQNzWwJ6MJXkKVMetD9X64NcyHjEkXDVRf8_NzLRTTvQ24zYqfQYlrs95')"></div>
+</div>
+<div class="flex-1">
+<p class="text-[10px] text-white/40 font-bold uppercase">ADC</p>
+<select class="w-full bg-transparent border-none p-0 text-sm font-semibold text-white focus:ring-0">
+<option>Jinx (KDA: 5.5)</option>
+<option>Ezreal</option>
+<option>Kai'sa</option>
+</select>
+</div>
+<div class="flex items-center gap-2">
+<div class="h-1.5 w-12 bg-white/5 rounded-full overflow-hidden">
+<div class="h-full bg-hextech-cyan w-2/3"></div>
+</div>
+</div>
+</div>
+<div class="flex items-center gap-4 group opacity-60">
+<div class="size-12 rounded-lg bg-white/5 border border-dashed border-white/20 flex items-center justify-center text-white/20">
+<span class="material-symbols-outlined">add</span>
+</div>
+<div class="flex-1"><p class="text-xs text-white/30 italic">Assign Remaining Slots...</p></div>
+</div>
+</div>
+</div>
+</div>
+<!-- Stats & Performance Toggles -->
+<div class="glass-panel p-6 rounded-xl">
+<h3 class="text-white font-bold mb-6 flex items-center gap-2">
+<span class="material-symbols-outlined text-primary">analytics</span>
+                                Performance Metrics
+                            </h3>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+<div class="space-y-6">
+<div>
+<div class="flex justify-between mb-2">
+<label class="text-xs font-medium text-white/60">Average Gold/Min (Team A)</label>
+<span class="text-xs font-bold text-primary">1,850g</span>
+</div>
+<input class="w-full h-1 bg-white/10 rounded-lg appearance-none cursor-pointer accent-primary" max="3000" min="1000" type="range" value="1850"/>
+</div>
+<div>
+<div class="flex justify-between mb-2">
+<label class="text-xs font-medium text-white/60">Vision Score Index</label>
+<span class="text-xs font-bold text-primary">78%</span>
+</div>
+<input class="w-full h-1 bg-white/10 rounded-lg appearance-none cursor-pointer accent-primary" max="100" min="0" type="range" value="78"/>
+</div>
+</div>
+<div class="grid grid-cols-1 gap-3">
+<div class="flex items-center justify-between p-3 rounded-lg bg-white/5 border border-white/10">
+<span class="text-xs font-medium">Current Patch Synergy (v13.24)</span>
+<div class="w-10 h-5 bg-primary/30 rounded-full relative cursor-pointer">
+<div class="absolute right-1 top-1 size-3 bg-primary rounded-full"></div>
+</div>
+</div>
+<div class="flex items-center justify-between p-3 rounded-lg bg-white/5 border border-white/10">
+<span class="text-xs font-medium">Recent Win Streak Bonus</span>
+<div class="w-10 h-5 bg-white/10 rounded-full relative cursor-pointer">
+<div class="absolute left-1 top-1 size-3 bg-white/40 rounded-full"></div>
+</div>
+</div>
+<div class="flex items-center justify-between p-3 rounded-lg bg-white/5 border border-white/10">
+<span class="text-xs font-medium">Late Game Scaling Focus</span>
+<div class="w-10 h-5 bg-primary/30 rounded-full relative cursor-pointer">
+<div class="absolute right-1 top-1 size-3 bg-primary rounded-full"></div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Right Column: Result Panel -->
+<div class="lg:col-span-5 flex flex-col gap-6">
+<!-- Prediction Summary -->
+<div class="glass-panel p-8 rounded-2xl flex flex-col items-center relative overflow-hidden border-t-2 border-t-primary/50">
+<!-- Background Decoration -->
+<div class="absolute top-0 right-0 size-32 bg-primary/5 blur-[80px]"></div>
+<h3 class="text-white/40 text-xs font-black uppercase tracking-[0.2em] mb-8">Win Probability</h3>
+<!-- Gauge -->
+<div class="gauge-container mb-4">
+<div class="gauge-arc"></div>
+<div class="gauge-fill" style="transform: rotate(72deg);"></div>
+<div class="absolute inset-0 flex flex-col items-center justify-center pt-10">
+<span class="text-5xl font-black text-white leading-none">68%</span>
+<span class="text-[10px] font-bold text-primary mt-1 uppercase">Team A Advantage</span>
+</div>
+</div>
+<div class="bg-primary/20 text-primary px-4 py-1.5 rounded-full text-[10px] font-black uppercase tracking-widest border border-primary/30 mb-8">
+                                High Confidence Analysis
+                            </div>
+<div class="w-full space-y-4">
+<p class="text-white/50 text-[11px] font-bold uppercase tracking-wider mb-2">Key Influence Factors</p>
+<!-- Factors List -->
+<div class="space-y-2">
+<div class="flex items-center justify-between p-4 rounded-xl bg-white/5 border border-white/10 hover:border-primary/30 transition-all cursor-default group">
+<div class="flex items-center gap-3">
+<div class="size-8 rounded bg-primary/10 flex items-center justify-center text-primary">
+<span class="material-symbols-outlined text-lg">bolt</span>
+</div>
+<div>
+<p class="text-sm font-bold text-white">Team Comp Scaling</p>
+<p class="text-[10px] text-white/40">Team A excels past 30:00</p>
+</div>
+</div>
+<span class="text-sm font-bold text-green-400">+15.2%</span>
+</div>
+<div class="flex items-center justify-between p-4 rounded-xl bg-white/5 border border-white/10 hover:border-primary/30 transition-all cursor-default group">
+<div class="flex items-center gap-3">
+<div class="size-8 rounded bg-hextech-cyan/10 flex items-center justify-center text-hextech-cyan">
+<span class="material-symbols-outlined text-lg">flag</span>
+</div>
+<div>
+<p class="text-sm font-bold text-white">Objective Control</p>
+<p class="text-[10px] text-white/40">Team B superior dragon secure</p>
+</div>
+</div>
+<span class="text-sm font-bold text-red-400">-5.8%</span>
+</div>
+<div class="flex items-center justify-between p-4 rounded-xl bg-white/5 border border-white/10 hover:border-primary/30 transition-all cursor-default group">
+<div class="flex items-center gap-3">
+<div class="size-8 rounded bg-primary/10 flex items-center justify-center text-primary">
+<span class="material-symbols-outlined text-lg">psychology</span>
+</div>
+<div>
+<p class="text-sm font-bold text-white">Lane Dominance</p>
+<p class="text-[10px] text-white/40">Mid lane matchup advantage</p>
+</div>
+</div>
+<span class="text-sm font-bold text-green-400">+8.4%</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Historical Context Sparkline (Visualized with simple elements) -->
+<div class="glass-panel p-6 rounded-xl">
+<div class="flex justify-between items-center mb-6">
+<h4 class="text-xs font-bold text-white uppercase">Historical Trend</h4>
+<span class="text-[10px] text-white/40">Last 10 Patches</span>
+</div>
+<div class="h-24 flex items-end gap-1 px-2">
+<div class="flex-1 bg-white/5 h-[40%] rounded-t-sm"></div>
+<div class="flex-1 bg-white/5 h-[45%] rounded-t-sm"></div>
+<div class="flex-1 bg-white/5 h-[60%] rounded-t-sm"></div>
+<div class="flex-1 bg-primary/40 h-[75%] rounded-t-sm border-t border-primary/60"></div>
+<div class="flex-1 bg-primary/40 h-[70%] rounded-t-sm border-t border-primary/60"></div>
+<div class="flex-1 bg-primary/40 h-[85%] rounded-t-sm border-t border-primary/60"></div>
+<div class="flex-1 bg-primary h-[95%] rounded-t-sm shadow-[0_0_10px_rgba(200,170,111,0.2)]"></div>
+<div class="flex-1 bg-primary/60 h-[80%] rounded-t-sm border-t border-primary/60"></div>
+<div class="flex-1 bg-primary/40 h-[75%] rounded-t-sm border-t border-primary/60"></div>
+<div class="flex-1 bg-primary/80 h-[90%] rounded-t-sm border-t border-primary/60"></div>
+</div>
+<div class="mt-4 flex justify-between text-[10px] text-white/30 font-bold">
+<span>PATCH 13.14</span>
+<span>PATCH 13.24 (NOW)</span>
+</div>
+</div>
+<!-- Insights / Why this result? -->
+<div class="p-6 rounded-xl bg-primary/10 border border-primary/20">
+<div class="flex gap-4">
+<span class="material-symbols-outlined text-primary">info</span>
+<div>
+<p class="text-sm font-bold text-primary mb-1">Analyst Note</p>
+<p class="text-xs text-white/70 leading-relaxed">
+                                        Team A's composition has a statistically higher win rate against Team B's front line in late-game sieges. Expect the win probability to peak at the 32-minute mark if gold parity is maintained.
+                                    </p>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Sticky Bottom Action (Mobile) -->
+<div class="lg:hidden fixed bottom-6 left-4 right-4 z-40">
+<button class="w-full py-4 bg-primary text-background-dark font-black rounded-xl shadow-2xl flex items-center justify-center gap-2">
+<span class="material-symbols-outlined">rocket_launch</span>
+                        CALCULATE PREDICTION
+                    </button>
+</div>
+</main>
+</div>
+</div>
+</body></html>

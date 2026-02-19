@@ -1,0 +1,9 @@
+
+{
+  "name": "Hextech Insights",
+  "description": "A high-performance League of Legends analytics dashboard featuring predictive modeling, player progression analysis, and real-time match forecasting powered by advanced AI.",
+  "requestFramePermissions": [
+    "camera",
+    "microphone"
+  ]
+}

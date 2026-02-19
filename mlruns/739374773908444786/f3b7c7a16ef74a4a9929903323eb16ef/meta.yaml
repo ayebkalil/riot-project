@@ -1,0 +1,15 @@
+artifact_uri: mlflow-artifacts:/739374773908444786/f3b7c7a16ef74a4a9929903323eb16ef/artifacts
+end_time: 1771232597597
+entry_point_name: ''
+experiment_id: '739374773908444786'
+lifecycle_stage: active
+run_id: f3b7c7a16ef74a4a9929903323eb16ef
+run_name: LightGBM-v2-enriched
+run_uuid: f3b7c7a16ef74a4a9929903323eb16ef
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1771232593599
+status: 3
+tags: []
+user_id: ayebk

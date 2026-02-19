@@ -1,0 +1,6 @@
+artifact_location: mlflow-artifacts:/857194053947646676
+creation_time: 1771246784425
+experiment_id: '857194053947646676'
+last_update_time: 1771246784425
+lifecycle_stage: active
+name: smurf-anomaly-detection

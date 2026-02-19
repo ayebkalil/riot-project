@@ -1,0 +1,14 @@
+artifact_uri: mlflow-artifacts:/739374773908444786/ce8c24b410f84c289c2ab75ac7112668/artifacts
+end_time: 1771246293464
+entry_point_name: ''
+experiment_id: '739374773908444786'
+lifecycle_stage: active
+run_id: ce8c24b410f84c289c2ab75ac7112668
+run_name: XGBoost
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1771246288486
+status: 3
+tags: []
+user_id: ayebk

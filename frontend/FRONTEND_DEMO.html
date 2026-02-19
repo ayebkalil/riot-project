@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hextech Insights - Frontend Demo</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #0a0e13 0%, #1a1a2e 100%);
+            color: #fff;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+        
+        header {
+            text-align: center;
+            padding: 40px 0;
+            border-bottom: 2px solid rgba(200, 170, 111, 0.3);
+            margin-bottom: 40px;
+        }
+        
+        h1 {
+            font-size: 3rem;
+            background: linear-gradient(135deg, #c8aa6f 0%, #f0e6d2 50%, #c8aa6f 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 10px;
+            text-shadow: 0 0 30px rgba(200, 170, 111, 0.5);
+        }
+        
+        .subtitle {
+            color: rgba(255, 255, 255, 0.6);
+            font-size: 1.2rem;
+            margin-bottom: 20px;
+        }
+        
+        .status {
+            display: inline-block;
+            padding: 8px 20px;
+            background: rgba(200, 170, 111, 0.1);
+            border: 1px solid rgba(200, 170, 111, 0.3);
+            border-radius: 20px;
+            font-size: 0.9rem;
+            color: #c8aa6f;
+        }
+        
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(600px, 1fr));
+            gap: 30px;
+            margin-bottom: 40px;
+        }
+        
+        .card {
+            background: rgba(30, 26, 20, 0.6);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(200, 170, 111, 0.2);
+            border-radius: 16px;
+            padding: 20px;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+        
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 40px rgba(200, 170, 111, 0.2);
+            border-color: rgba(200, 170, 111, 0.5);
+        }
+        
+        .card-title {
+            font-size: 1.5rem;
+            margin-bottom: 10px;
+            color: #c8aa6f;
+        }
+        
+        .card-desc {
+            color: rgba(255, 255, 255, 0.7);
+            margin-bottom: 15px;
+            font-size: 0.95rem;
+        }
+        
+        .screenshot {
+            width: 100%;
+            border-radius: 8px;
+            border: 1px solid rgba(200, 170, 111, 0.2);
+            margin-top: 10px;
+        }
+        
+        .tech-stack {
+            background: rgba(30, 26, 20, 0.6);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(200, 170, 111, 0.2);
+            border-radius: 16px;
+            padding: 30px;
+            margin-top: 40px;
+        }
+        
+        .tech-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+        
+        .tech-item {
+            background: rgba(200, 170, 111, 0.1);
+            padding: 15px;
+            border-radius: 8px;
+            text-align: center;
+        }
+        
+        .tech-item strong {
+            display: block;
+            color: #c8aa6f;
+            margin-bottom: 5px;
+        }
+        
+        .note {
+            background: rgba(255, 193, 7, 0.1);
+            border-left: 4px solid #ffc107;
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 4px;
+        }
+        
+        .note-title {
+            color: #ffc107;
+            font-weight: bold;
+            margin-bottom: 8px;
+        }
+        
+        footer {
+            text-align: center;
+            margin-top: 60px;
+            padding-top: 30px;
+            border-top: 1px solid rgba(200, 170, 111, 0.2);
+            color: rgba(255, 255, 255, 0.5);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>⚔️ HEXTECH INSIGHTS ⚔️</h1>
+            <p class="subtitle">League of Legends ML-Powered Analytics Platform</p>
+            <span class="status">🎨 Frontend Design Mockups</span>
+        </header>
+        
+        <div class="note">
+            <div class="note-title">📢 Demo Note</div>
+            <p>These are design mockups showing the planned user interface. The frontend is built with <strong>React + TypeScript + Tailwind CSS</strong>. API integration with trained ML models is the next milestone.</p>
+        </div>
+        
+        <div class="grid">
+            <div class="card" onclick="openImage('dashboard_overview/screen.png')">
+                <h3 class="card-title">📊 Analytics Dashboard</h3>
+                <p class="card-desc">Main overview showing player performance metrics, win rates, recent matches, and key statistics with modern visualizations.</p>
+                <img src="dashboard_overview/screen.png" alt="Dashboard Overview" class="screenshot">
+            </div>
+            
+            <div class="card" onclick="openImage('ml_model_dashboard/screen.png')">
+                <h3 class="card-title">🤖 ML Model Dashboard</h3>
+                <p class="card-desc">Central hub displaying all 4 machine learning models with accuracy metrics, system health, and quick launch buttons.</p>
+                <img src="ml_model_dashboard/screen.png" alt="ML Dashboard" class="screenshot">
+            </div>
+            
+            <div class="card" onclick="openImage('match_outcome_prediction/screen.png')">
+                <h3 class="card-title">🎯 Match Outcome Prediction</h3>
+                <p class="card-desc">Team composition analyzer with real-time win probability forecasting based on champion picks and player performance.</p>
+                <img src="match_outcome_prediction/screen.png" alt="Match Prediction" class="screenshot">
+            </div>
+            
+            <div class="card" onclick="openImage('player_profile_&_match_history/screen.png')">
+                <h3 class="card-title">👤 Player Profile & History</h3>
+                <p class="card-desc">Detailed player statistics, match history, performance tracking, and progression analysis over time.</p>
+                <img src="player_profile_&_match_history/screen.png" alt="Player Profile" class="screenshot">
+            </div>
+        </div>
+        
+        <div class="tech-stack">
+            <h2 style="color: #c8aa6f; margin-bottom: 20px;">🛠️ Technology Stack</h2>
+            <div class="tech-grid">
+                <div class="tech-item">
+                    <strong>Frontend</strong>
+                    <div>React 19 + TypeScript</div>
+                </div>
+                <div class="tech-item">
+                    <strong>Build Tool</strong>
+                    <div>Vite 6.2</div>
+                </div>
+                <div class="tech-item">
+                    <strong>Styling</strong>
+                    <div>Tailwind CSS</div>
+                </div>
+                <div class="tech-item">
+                    <strong>Charts</strong>
+                    <div>Recharts 3.7</div>
+                </div>
+                <div class="tech-item">
+                    <strong>Routing</strong>
+                    <div>React Router 7</div>
+                </div>
+                <div class="tech-item">
+                    <strong>ML Backend</strong>
+                    <div>Python + MLflow</div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="tech-stack" style="margin-top: 30px;">
+            <h2 style="color: #c8aa6f; margin-bottom: 20px;">🎯 4 Core ML Models</h2>
+            <div class="tech-grid">
+                <div class="tech-item">
+                    <strong>Rank Classification</strong>
+                    <div>65.21% Accuracy ✅</div>
+                    <div style="font-size: 0.85rem; color: rgba(255,255,255,0.5); margin-top: 5px;">LightGBM - 4 Classes</div>
+                </div>
+                <div class="tech-item">
+                    <strong>Match Outcome</strong>
+                    <div>Training Complete</div>
+                    <div style="font-size: 0.85rem; color: rgba(255,255,255,0.5); margin-top: 5px;">Binary Classification</div>
+                </div>
+                <div class="tech-item">
+                    <strong>Progression</strong>
+                    <div>Training Complete</div>
+                    <div style="font-size: 0.85rem; color: rgba(255,255,255,0.5); margin-top: 5px;">Win Rate Regression</div>
+                </div>
+                <div class="tech-item">
+                    <strong>Smurf Detection</strong>
+                    <div>Training Complete</div>
+                    <div style="font-size: 0.85rem; color: rgba(255,255,255,0.5); margin-top: 5px;">Anomaly Detection</div>
+                </div>
+            </div>
+        </div>
+        
+        <footer>
+            <p>League of Legends ML Analytics Platform | Built with React + Python + MLflow</p>
+            <p style="margin-top: 10px; font-size: 0.9rem;">🔗 View MLflow Dashboard: <code>mlflow ui --port 5000</code></p>
+        </footer>
+    </div>
+    
+    <script>
+        function openImage(path) {
+            window.open(path, '_blank');
+        }
+    </script>
+</body>
+</html>

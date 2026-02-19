@@ -1,0 +1,411 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Hextech Insights - ML Dashboard</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#c8aa6f",
+                        "background-light": "#f8f7f6",
+                        "background-dark": "#0a0a0c",
+                        "hextech-blue": "#00d1ff",
+                        "hextech-dark-blue": "#091428",
+                        "surface-dark": "#121214",
+                        "border-gold": "rgba(200, 170, 111, 0.2)",
+                    },
+                    fontFamily: {
+                        "display": ["Inter", "sans-serif"]
+                    },
+                    borderRadius: {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                },
+            },
+        }
+    </script>
+<style>
+        .hextech-gradient {
+            background: linear-gradient(135deg, #c8aa6f 0%, #785a28 100%);
+        }
+        .glow-blue {
+            box-shadow: 0 0 15px rgba(0, 209, 255, 0.2);
+        }
+        .glow-gold:hover {
+            box-shadow: 0 0 20px rgba(200, 170, 111, 0.3);
+        }
+        .pulse-green {
+            box-shadow: 0 0 0 0 rgba(34, 197, 94, 0.7);
+            animation: pulse 2s infinite;
+        }
+        @keyframes pulse {
+            0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(34, 197, 94, 0.7); }
+            70% { transform: scale(1); box-shadow: 0 0 0 6px rgba(34, 197, 94, 0); }
+            100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(34, 197, 94, 0); }
+        }
+    </style>
+</head>
+<body class="bg-background-light dark:bg-background-dark font-display text-slate-900 dark:text-slate-100 min-h-screen">
+<!-- Top Navigation Bar -->
+<header class="sticky top-0 z-50 w-full border-b border-white/5 bg-background-dark/80 backdrop-blur-md">
+<div class="max-w-[1400px] mx-auto px-6 h-16 flex items-center justify-between">
+<div class="flex items-center gap-10">
+<div class="flex items-center gap-3">
+<div class="size-8 bg-primary rounded flex items-center justify-center text-background-dark">
+<span class="material-symbols-outlined font-bold">query_stats</span>
+</div>
+<h1 class="text-primary font-bold text-xl tracking-tight">HEXTECH INSIGHTS</h1>
+</div>
+<nav class="hidden md:flex items-center gap-8">
+<a class="text-primary border-b-2 border-primary py-5 text-sm font-semibold" href="#">Models</a>
+<a class="text-slate-400 hover:text-white transition-colors text-sm font-medium" href="#">Batch Analysis</a>
+<a class="text-slate-400 hover:text-white transition-colors text-sm font-medium" href="#">Performance Metrics</a>
+</nav>
+</div>
+<div class="flex items-center gap-6">
+<div class="relative group hidden lg:block">
+<span class="absolute inset-y-0 left-0 pl-3 flex items-center text-slate-500">
+<span class="material-symbols-outlined text-sm">search</span>
+</span>
+<input class="bg-surface-dark border border-white/10 rounded-lg pl-10 pr-4 py-2 text-sm focus:ring-1 focus:ring-primary focus:border-primary w-64 outline-none transition-all" placeholder="Search matches or players..." type="text"/>
+</div>
+<button class="bg-white/5 hover:bg-white/10 border border-white/10 rounded-lg px-4 py-2 flex items-center gap-2 text-sm transition-all">
+<span class="material-symbols-outlined text-primary text-sm">public</span>
+<span class="font-medium">Region: NA/EUW</span>
+</button>
+<div class="size-9 rounded-full bg-cover bg-center border border-primary/40" data-alt="User profile avatar icon" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuCPEZAqB4hE_QU3F6_YHWXPvisVCmNple4xVV_QBxmtCLiaNzmTKISYT1IT4P36Q7TU9ugeB-faphU-anjTjSJcR4YgxNQnonwWWSgVBk-VVyAUVEZV31GHJ5UG69_aV4flF-3K58J2irSGEBwDQOcqNYzdHaS9sjOzOQKjRqtpq5dZW7DCEkZkvDVTMjYdld_TyieWkwVONwxhpHgmQ1WuQhERF7w3YaTIjC_OcSoDEiVdZLzq_9IS7UMySzt0TzvBAEmV_oGeAcau')"></div>
+</div>
+</div>
+</header>
+<main class="max-w-[1400px] mx-auto px-6 py-10">
+<!-- Dashboard Header -->
+<div class="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-10">
+<div>
+<h2 class="text-4xl font-black text-white mb-2 tracking-tight">MODEL DASHBOARD</h2>
+<p class="text-slate-400 max-w-2xl text-lg">Real-time machine learning analytics and competitive performance tracking for League of Legends global regions.</p>
+</div>
+<div class="flex gap-4">
+<div class="bg-surface-dark border border-white/5 p-4 rounded-xl flex items-center gap-4">
+<div class="size-10 rounded-lg bg-primary/10 flex items-center justify-center text-primary">
+<span class="material-symbols-outlined">data_exploration</span>
+</div>
+<div>
+<p class="text-xs text-slate-500 uppercase font-bold tracking-wider">Daily Predictions</p>
+<p class="text-xl font-bold text-white">142,891</p>
+</div>
+</div>
+<div class="bg-surface-dark border border-white/5 p-4 rounded-xl flex items-center gap-4">
+<div class="size-10 rounded-lg bg-hextech-blue/10 flex items-center justify-center text-hextech-blue">
+<span class="material-symbols-outlined">speed</span>
+</div>
+<div>
+<p class="text-xs text-slate-500 uppercase font-bold tracking-wider">Avg Inference</p>
+<p class="text-xl font-bold text-white">42ms</p>
+</div>
+</div>
+</div>
+</div>
+<!-- Main Grid -->
+<div class="grid grid-cols-1 xl:grid-cols-4 gap-8">
+<!-- Left Content: Model Cards -->
+<div class="xl:col-span-3 space-y-8">
+<div class="flex items-center justify-between mb-4">
+<h3 class="text-xl font-bold text-white flex items-center gap-2">
+<span class="material-symbols-outlined text-primary">hub</span>
+                        Core Analytical Models
+                    </h3>
+<button class="text-sm text-primary hover:underline font-medium">View all architectures</button>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+<!-- Card 1: Match Outcome -->
+<div class="group relative bg-surface-dark border border-border-gold rounded-xl overflow-hidden hover:border-primary/60 transition-all duration-300">
+<div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-primary to-transparent opacity-50"></div>
+<div class="p-6">
+<div class="flex justify-between items-start mb-6">
+<div class="size-14 rounded-xl bg-primary/10 flex items-center justify-center text-primary border border-primary/20">
+<span class="material-symbols-outlined text-3xl">sports_esports</span>
+</div>
+<div class="text-right">
+<div class="text-primary text-2xl font-black">92%</div>
+<div class="text-[10px] uppercase font-bold text-slate-500 tracking-widest">Accuracy</div>
+</div>
+</div>
+<h4 class="text-xl font-bold text-white mb-2">Match Outcome Prediction</h4>
+<p class="text-slate-400 text-sm leading-relaxed mb-6">Real-time win probability forecasting based on team compositions, early objectives, and gold differentials.</p>
+<!-- Sparkline Mockup -->
+<div class="flex items-end gap-1 h-8 mb-8">
+<div class="w-full h-4 bg-primary/20 rounded-t-sm"></div>
+<div class="w-full h-6 bg-primary/30 rounded-t-sm"></div>
+<div class="w-full h-5 bg-primary/20 rounded-t-sm"></div>
+<div class="w-full h-8 bg-primary rounded-t-sm"></div>
+<div class="w-full h-6 bg-primary/40 rounded-t-sm"></div>
+<div class="w-full h-7 bg-primary/50 rounded-t-sm"></div>
+</div>
+<button class="w-full py-3 bg-primary hover:bg-primary/90 text-background-dark font-bold rounded-lg transition-all glow-gold flex items-center justify-center gap-2">
+<span class="material-symbols-outlined text-sm">rocket_launch</span>
+                                LAUNCH MODEL
+                            </button>
+</div>
+</div>
+<!-- Card 2: Rank Classification -->
+<div class="group relative bg-surface-dark border border-white/10 rounded-xl overflow-hidden hover:border-hextech-blue/60 transition-all duration-300">
+<div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-hextech-blue to-transparent opacity-50"></div>
+<div class="p-6">
+<div class="flex justify-between items-start mb-6">
+<div class="size-14 rounded-xl bg-hextech-blue/10 flex items-center justify-center text-hextech-blue border border-hextech-blue/20">
+<span class="material-symbols-outlined text-3xl">military_tech</span>
+</div>
+<div class="text-right">
+<div class="text-hextech-blue text-2xl font-black">88%</div>
+<div class="text-[10px] uppercase font-bold text-slate-500 tracking-widest">Accuracy</div>
+</div>
+</div>
+<h4 class="text-xl font-bold text-white mb-2">Rank Classification</h4>
+<p class="text-slate-400 text-sm leading-relaxed mb-6">Deep learning analysis of player mechanics and decision patterns to identify true skill brackets versus displayed rank.</p>
+<div class="flex items-end gap-1 h-8 mb-8">
+<div class="w-full h-6 bg-hextech-blue/20 rounded-t-sm"></div>
+<div class="w-full h-4 bg-hextech-blue/30 rounded-t-sm"></div>
+<div class="w-full h-7 bg-hextech-blue/20 rounded-t-sm"></div>
+<div class="w-full h-5 bg-hextech-blue rounded-t-sm"></div>
+<div class="w-full h-8 bg-hextech-blue/40 rounded-t-sm"></div>
+<div class="w-full h-6 bg-hextech-blue/50 rounded-t-sm"></div>
+</div>
+<button class="w-full py-3 bg-white/10 hover:bg-white/20 text-white font-bold rounded-lg transition-all flex items-center justify-center gap-2">
+<span class="material-symbols-outlined text-sm">rocket_launch</span>
+                                LAUNCH MODEL
+                            </button>
+</div>
+</div>
+<!-- Card 3: Player Progression -->
+<div class="group relative bg-surface-dark border border-white/10 rounded-xl overflow-hidden hover:border-white/20 transition-all duration-300">
+<div class="p-6">
+<div class="flex justify-between items-start mb-6">
+<div class="size-14 rounded-xl bg-slate-800 flex items-center justify-center text-slate-300 border border-white/10">
+<span class="material-symbols-outlined text-3xl">trending_up</span>
+</div>
+<div class="text-right">
+<div class="text-white text-2xl font-black">85%</div>
+<div class="text-[10px] uppercase font-bold text-slate-500 tracking-widest">Accuracy</div>
+</div>
+</div>
+<h4 class="text-xl font-bold text-white mb-2">Player Progression</h4>
+<p class="text-slate-400 text-sm leading-relaxed mb-6">Time-series forecasting that identifies long-term improvement trends and burnout risk using historical match data.</p>
+<div class="flex items-end gap-1 h-8 mb-8">
+<div class="w-full h-3 bg-white/10 rounded-t-sm"></div>
+<div class="w-full h-5 bg-white/20 rounded-t-sm"></div>
+<div class="w-full h-8 bg-white/30 rounded-t-sm"></div>
+<div class="w-full h-6 bg-white/20 rounded-t-sm"></div>
+<div class="w-full h-7 bg-white/40 rounded-t-sm"></div>
+<div class="w-full h-4 bg-white/10 rounded-t-sm"></div>
+</div>
+<button class="w-full py-3 bg-white/10 hover:bg-white/20 text-white font-bold rounded-lg transition-all flex items-center justify-center gap-2">
+<span class="material-symbols-outlined text-sm">rocket_launch</span>
+                                LAUNCH MODEL
+                            </button>
+</div>
+</div>
+<!-- Card 4: Smurf Detection -->
+<div class="group relative bg-surface-dark border border-white/10 rounded-xl overflow-hidden hover:border-red-500/40 transition-all duration-300">
+<div class="p-6">
+<div class="flex justify-between items-start mb-6">
+<div class="size-14 rounded-xl bg-red-500/10 flex items-center justify-center text-red-500 border border-red-500/20">
+<span class="material-symbols-outlined text-3xl">security</span>
+</div>
+<div class="text-right">
+<div class="text-red-500 text-2xl font-black">95%</div>
+<div class="text-[10px] uppercase font-bold text-slate-500 tracking-widest">Accuracy</div>
+</div>
+</div>
+<h4 class="text-xl font-bold text-white mb-2">Smurf Detection</h4>
+<p class="text-slate-400 text-sm leading-relaxed mb-6">Identifying anomalous performance patterns and behavior inconsistent with account level or historical skill ceiling.</p>
+<div class="flex items-end gap-1 h-8 mb-8">
+<div class="w-full h-8 bg-red-500/30 rounded-t-sm"></div>
+<div class="w-full h-6 bg-red-500/20 rounded-t-sm"></div>
+<div class="w-full h-7 bg-red-500/40 rounded-t-sm"></div>
+<div class="w-full h-5 bg-red-500/20 rounded-t-sm"></div>
+<div class="w-full h-8 bg-red-500/50 rounded-t-sm"></div>
+<div class="w-full h-4 bg-red-500/10 rounded-t-sm"></div>
+</div>
+<button class="w-full py-3 bg-white/10 hover:bg-white/20 text-white font-bold rounded-lg transition-all flex items-center justify-center gap-2">
+<span class="material-symbols-outlined text-sm">rocket_launch</span>
+                                LAUNCH MODEL
+                            </button>
+</div>
+</div>
+</div>
+<!-- Recent Predictions Table -->
+<div class="bg-surface-dark border border-white/5 rounded-xl overflow-hidden">
+<div class="px-6 py-5 border-b border-white/5 flex items-center justify-between">
+<h3 class="text-lg font-bold text-white flex items-center gap-2">
+<span class="material-symbols-outlined text-primary">history</span>
+                            Recent Predictions
+                        </h3>
+<div class="flex gap-2">
+<button class="text-xs bg-white/5 px-3 py-1.5 rounded-md text-slate-400 hover:text-white transition-colors">Export CSV</button>
+<button class="text-xs bg-white/5 px-3 py-1.5 rounded-md text-slate-400 hover:text-white transition-colors">Refresh</button>
+</div>
+</div>
+<div class="overflow-x-auto">
+<table class="w-full text-left">
+<thead>
+<tr class="bg-white/[0.02] text-slate-500 text-[10px] uppercase tracking-widest font-bold">
+<th class="px-6 py-4">Match ID</th>
+<th class="px-6 py-4">Model Used</th>
+<th class="px-6 py-4">Output / Result</th>
+<th class="px-6 py-4">Confidence</th>
+<th class="px-6 py-4 text-right">Processed</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-white/5">
+<tr class="text-sm text-slate-300 hover:bg-white/[0.02] transition-colors">
+<td class="px-6 py-4 font-mono text-xs text-primary">#482910-EUW</td>
+<td class="px-6 py-4">Match Outcome</td>
+<td class="px-6 py-4">
+<span class="px-2 py-1 bg-green-500/10 text-green-500 rounded text-xs font-bold uppercase">Blue Team Win</span>
+</td>
+<td class="px-6 py-4 font-semibold">94.2%</td>
+<td class="px-6 py-4 text-right text-slate-500">2m ago</td>
+</tr>
+<tr class="text-sm text-slate-300 hover:bg-white/[0.02] transition-colors">
+<td class="px-6 py-4 font-mono text-xs text-primary">#482909-EUW</td>
+<td class="px-6 py-4">Rank Class</td>
+<td class="px-6 py-4">
+<span class="px-2 py-1 bg-primary/10 text-primary rounded text-xs font-bold uppercase">Diamond III+</span>
+</td>
+<td class="px-6 py-4 font-semibold">81.5%</td>
+<td class="px-6 py-4 text-right text-slate-500">5m ago</td>
+</tr>
+<tr class="text-sm text-slate-300 hover:bg-white/[0.02] transition-colors">
+<td class="px-6 py-4 font-mono text-xs text-primary">#482908-EUW</td>
+<td class="px-6 py-4">Smurf Detect</td>
+<td class="px-6 py-4">
+<span class="px-2 py-1 bg-red-500/10 text-red-500 rounded text-xs font-bold uppercase">High Risk</span>
+</td>
+<td class="px-6 py-4 font-semibold">98.1%</td>
+<td class="px-6 py-4 text-right text-slate-500">12m ago</td>
+</tr>
+<tr class="text-sm text-slate-300 hover:bg-white/[0.02] transition-colors">
+<td class="px-6 py-4 font-mono text-xs text-primary">#482907-EUW</td>
+<td class="px-6 py-4">Match Outcome</td>
+<td class="px-6 py-4">
+<span class="px-2 py-1 bg-slate-500/10 text-slate-400 rounded text-xs font-bold uppercase">Red Team Win</span>
+</td>
+<td class="px-6 py-4 font-semibold">62.8%</td>
+<td class="px-6 py-4 text-right text-slate-500">18m ago</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="p-4 border-t border-white/5 text-center">
+<button class="text-sm font-medium text-slate-500 hover:text-white transition-colors">View full prediction history</button>
+</div>
+</div>
+</div>
+<!-- Right Sidebar: Model Health -->
+<div class="xl:col-span-1 space-y-8">
+<div class="bg-surface-dark border border-white/5 rounded-xl p-6">
+<h3 class="text-lg font-bold text-white mb-6 flex items-center gap-2">
+<span class="material-symbols-outlined text-primary">monitoring</span>
+                        System Health
+                    </h3>
+<div class="space-y-6">
+<!-- Health Item 1 -->
+<div class="space-y-2">
+<div class="flex justify-between items-center">
+<span class="text-sm font-medium text-slate-300">Predictive Engine</span>
+<div class="flex items-center gap-2">
+<span class="text-[10px] font-bold text-green-500 uppercase">Stable</span>
+<div class="size-2 rounded-full bg-green-500 pulse-green"></div>
+</div>
+</div>
+<div class="w-full bg-white/5 h-1.5 rounded-full overflow-hidden">
+<div class="bg-green-500 h-full w-full"></div>
+</div>
+</div>
+<!-- Health Item 2 -->
+<div class="space-y-2">
+<div class="flex justify-between items-center">
+<span class="text-sm font-medium text-slate-300">GPU Cluster Alpha</span>
+<div class="flex items-center gap-2">
+<span class="text-[10px] font-bold text-green-500 uppercase">Optimal</span>
+<div class="size-2 rounded-full bg-green-500 pulse-green"></div>
+</div>
+</div>
+<div class="w-full bg-white/5 h-1.5 rounded-full overflow-hidden">
+<div class="bg-green-500 h-full w-[92%]"></div>
+</div>
+</div>
+<!-- Health Item 3 -->
+<div class="space-y-2">
+<div class="flex justify-between items-center">
+<span class="text-sm font-medium text-slate-300">Smurf Detection Service</span>
+<div class="flex items-center gap-2">
+<span class="text-[10px] font-bold text-yellow-500 uppercase">Training</span>
+<div class="size-2 rounded-full bg-yellow-500"></div>
+</div>
+</div>
+<div class="w-full bg-white/5 h-1.5 rounded-full overflow-hidden">
+<div class="bg-yellow-500 h-full w-[45%]"></div>
+</div>
+</div>
+<!-- Health Item 4 -->
+<div class="space-y-2">
+<div class="flex justify-between items-center">
+<span class="text-sm font-medium text-slate-300">Global Data Ingest</span>
+<div class="flex items-center gap-2">
+<span class="text-[10px] font-bold text-green-500 uppercase">Active</span>
+<div class="size-2 rounded-full bg-green-500 pulse-green"></div>
+</div>
+</div>
+<div class="w-full bg-white/5 h-1.5 rounded-full overflow-hidden">
+<div class="bg-green-500 h-full w-full"></div>
+</div>
+</div>
+</div>
+<div class="mt-8 pt-8 border-t border-white/5">
+<div class="flex items-center justify-between text-xs mb-4">
+<span class="text-slate-500 font-bold uppercase tracking-wider">Storage Usage</span>
+<span class="text-slate-300">4.2 TB / 10 TB</span>
+</div>
+<div class="w-full bg-white/5 h-3 rounded-full overflow-hidden flex">
+<div class="bg-primary h-full w-[42%]"></div>
+<div class="bg-hextech-blue h-full w-[15%]"></div>
+</div>
+</div>
+</div>
+<!-- Featured Alert -->
+<div class="bg-gradient-to-br from-primary/20 to-transparent border border-primary/20 rounded-xl p-6">
+<div class="flex items-start gap-4">
+<div class="size-10 rounded-lg bg-primary/20 flex items-center justify-center text-primary shrink-0">
+<span class="material-symbols-outlined">auto_awesome</span>
+</div>
+<div>
+<h4 class="text-white font-bold mb-1">New Patch v14.2</h4>
+<p class="text-slate-400 text-xs leading-relaxed mb-4">Neural networks are currently re-weighting objective values based on the latest map changes. Model retraining will finish in 4h.</p>
+<button class="text-xs font-bold text-primary flex items-center gap-1 group">
+                                Read patch notes
+                                <span class="material-symbols-outlined text-sm transition-transform group-hover:translate-x-1">arrow_forward</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Footer/System Info -->
+<div class="px-6 text-center lg:text-left">
+<p class="text-[10px] text-slate-600 uppercase font-bold tracking-[0.2em]">Hextech Insights Protocol</p>
+<p class="text-[10px] text-slate-600 mt-1">Version 2.4.1-stable. Build 849a2</p>
+</div>
+</div>
+</div>
+</main>
+</body></html>
